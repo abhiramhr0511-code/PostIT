@@ -81,7 +81,11 @@ export default function App() {
     data.append("review", reviewForm.review);
     data.append("image", image);
 
-    await axios.post(API + "/reviews", data);
+    await axios.post(API + "/reviews", data, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
 
     alert("Posted Successfully");
 

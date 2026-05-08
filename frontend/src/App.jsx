@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API = "https://YOUR-RENDER-BACKEND.onrender.com";
+const API = "https://postit-backend-koys.onrender.com";
 
 export default function App() {
   const [page, setPage] = useState("home");

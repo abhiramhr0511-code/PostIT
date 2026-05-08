@@ -6,7 +6,9 @@ const fs = require("fs");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -83,7 +85,45 @@ app.get("/reviews",(req,res)=>{
   res.json(reviews);
 });
 
-app.post("/reviews",upload.single("image"),(req,res)=>{
+app.post("/reviews", upload.single("image"), (req, res) => {
+
+  try {
+
+    const reviews = JSON.parse(
+      fs.readFileSync("reviews.json")
+    );
+
+    const newReview = {
+      username: req.body.username,
+      location: req.body.location,
+      review: req.body.review,
+      image: req.file
+        ? "/uploads/" + req.file.filename
+        : ""
+    };
+
+    reviews.push(newReview);
+
+    fs.writeFileSync(
+      "reviews.json",
+      JSON.stringify(reviews, null, 2)
+    );
+
+    res.json({
+      success: true,
+      message: "Posted Successfully"
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Upload Failed"
+    });
+  }
+});
 
   const reviews = JSON.parse(fs.readFileSync("reviews.json"));
 
